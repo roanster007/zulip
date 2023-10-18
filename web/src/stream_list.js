@@ -788,13 +788,19 @@ export function set_event_handlers({on_stream_click}) {
         if (e.metaKey || e.ctrlKey) {
             return;
         }
-        const stream_id = stream_id_for_elt($(e.target).parents("li"));
-        on_stream_click(stream_id, "sidebar");
 
-        clear_and_hide_search();
+        if ($("ul#stream_filters li").hasClass("active-filter stream-expanded")) {
+            //
+            $("ul#stream_filters li").removeClass("active-filter stream-expanded");
+        } else {
+            const stream_id = stream_id_for_elt($(e.target).parents("li"));
+            on_stream_click(stream_id, "sidebar");
 
-        e.preventDefault();
-        e.stopPropagation();
+            clear_and_hide_search();
+
+            e.preventDefault();
+            e.stopPropagation();
+        }
     });
 
     $("#clear_search_stream_button").on("click", clear_search);
