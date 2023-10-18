@@ -792,6 +792,7 @@ export function set_event_handlers({on_stream_click}) {
         if ($("ul#stream_filters li").hasClass("active-filter stream-expanded")) {
             //
             $("ul#stream_filters li").removeClass("active-filter stream-expanded");
+            $("ul.topic-list").remove();
         } else {
             const stream_id = stream_id_for_elt($(e.target).parents("li"));
             on_stream_click(stream_id, "sidebar");
