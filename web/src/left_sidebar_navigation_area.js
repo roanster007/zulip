@@ -1,5 +1,6 @@
 import $ from "jquery";
 
+import * as alert_words from "./alert_words";
 import {localstorage} from "./localstorage";
 import {page_params} from "./page_params";
 import * as resize from "./resize";
@@ -50,6 +51,16 @@ export function update_scheduled_messages_row() {
     ui_util.update_unread_count_in_dom($scheduled_li, count);
 }
 
+export function update_alert_messages_row() {
+    const $alerted_li = $(".top_left_alerts");
+    const alert_words_set = alert_words.get_word_list().length > 0;
+    if (alert_words_set) {
+        $alerted_li.show();
+    } else {
+        $alerted_li.hide();
+    }
+}
+
 export function update_dom_with_unread_counts(counts, skip_animations) {
     // Note that direct message counts are handled in pm_list.js.
 
@@ -80,6 +91,7 @@ function deselect_top_left_corner_items() {
     remove($(".top_left_all_messages"));
     remove($(".top_left_starred_messages"));
     remove($(".top_left_mentions"));
+    remove($(".top_left_alerts"));
     remove($(".top_left_recent_view"));
     remove($(".top_left_inbox"));
 }
@@ -115,6 +127,13 @@ export function handle_narrow_activated(filter) {
 
                 break;
             }
+            case "alerted": {
+                $filter_li = $(".top_left_alerts");
+                $filter_li.addClass("active-filter");
+
+                break;
+            }
+            // No default
         }
     }
 }
@@ -233,6 +252,8 @@ export function handle_home_view_changed(new_home_view) {
 
 export function initialize() {
     update_scheduled_messages_row();
+    update_alert_messages_row();
+
     restore_views_state();
 
     $("body").on(
